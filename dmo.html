@@ -1,0 +1,45 @@
+To deploy a web application in a Kubernetes pod, create a replica set, and scale the number of replicas as needed when the load increases, you can follow these steps:
+
+command i use:
+ 128  vim web-app-deployment.yaml
+  129  vim test.yaml
+  130  vim web-app-deployment.yaml
+  131  kubectl apply -f web-app-deployment.yaml
+  132  kubectl scale deployment web-app-deployment --replica=5
+  133  kubectl scale deployment web-app-deployment -replica=5
+  134  kubectl scale deployment web-app-deployment --replicas=5
+  135  kubctl get pod
+  136  kubectl get pod
+
+web-application yamil file:
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-app-deployment
+spec:
+  replicas: 3  # Initially, deploy 3 replicas. Adjust as needed.
+  selector:
+    matchLabels:
+      app: web-app
+  template:
+    metadata:
+      labels:
+        app: web-app
+    spec:
+      containers:
+      - name: web-app-container
+        image: your-web-app-image:latest
+        ports:
+        - containerPort: 80
+
+output:
+root@luffy-laptop:~# kubectl get pod
+NAME                                  READY   STATUS             RESTARTS   AGE
+nginx-deployment-6b7f675859-5x79g     1/1     Running            0          11m
+nginx-deployment-6b7f675859-q648l     1/1     Running            0          11m
+nginx-deployment-6b7f675859-srjpd     1/1     Running            0          11m
+web-app-deployment-544697cf47-679lc   0/1     ImagePullBackOff   0          2m39s
+web-app-deployment-544697cf47-fxqbx   0/1     ImagePullBackOff   0          3m34s
+web-app-deployment-544697cf47-jjbsq   0/1     ImagePullBackOff   0          2m39s
+web-app-deployment-544697cf47-mltwc   0/1     ImagePullBackOff   0          3m34s
+web-app-deployment-544697cf47-rhlv8   0/1     ImagePullBackOff   0          3m34s
