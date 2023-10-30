@@ -43,3 +43,24 @@ web-app-deployment-544697cf47-fxqbx   0/1     ImagePullBackOff   0          3m34
 web-app-deployment-544697cf47-jjbsq   0/1     ImagePullBackOff   0          2m39s
 web-app-deployment-544697cf47-mltwc   0/1     ImagePullBackOff   0          3m34s
 web-app-deployment-544697cf47-rhlv8   0/1     ImagePullBackOff   0          3m34s
+
+---
+- name: Install and configure Apache HTTP Server
+  hosts: web-servers
+  become: yes
+  tasks:
+    - name: Install httpd package
+      yum:
+        name: httpd
+        state: present
+
+    - name: Start and enable httpd service
+      service:
+        name: httpd
+        state: started
+        enabled: yes
+
+    - name: Copy fstab file to /tmp folder
+      copy:
+        src: /etc/fstab
+        dest: /tmp/fstab
